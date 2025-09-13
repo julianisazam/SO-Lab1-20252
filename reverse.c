@@ -2,28 +2,28 @@
 #include <stdlib.h>
 #include <string.h>
 
-void readLine();
+void readLineAndInversePrint(char *path);
 int countLines(FILE * fileContent);
 
 int main(int argc, char *argv[]){
 
-    readLine();
+    readLineAndInversePrint(argv[1]);
 
     return 0;
     
 
 }
 
-void readLine(){
+void readLineAndInversePrint(char *path){
     FILE * fileContent;
     
-    fileContent = fopen("entrada.txt", "r");
+    fileContent = fopen(path, "r");
     if (fileContent!= NULL){
 
         int count = countLines(fileContent);
         rewind(fileContent);
         char **array = malloc(count * sizeof(char *));
-        for (int i = 0; i < count; i++){
+        for (int i = count - 1; i >=0; i--){
             char * line;
             size_t len = 0;
             array[i] = malloc(sizeof(char));
