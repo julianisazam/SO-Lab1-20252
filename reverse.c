@@ -3,10 +3,10 @@
 #include <string.h>
 
 void readLine();
+int countLines(FILE * fileContent);
 
 int main(int argc, char *argv[]){
 
-    //readFile();
     readLine();
 
     return 0;
@@ -14,29 +14,48 @@ int main(int argc, char *argv[]){
 
 }
 
-/*void readFile(){
-
-    FILE * fileContent;
-    fileContent = fopen("entrada.txt", "r");
-
-    return fileContent;
-
-    //fclose (fileContent);
-}*/
-
 void readLine(){
     FILE * fileContent;
+    
     fileContent = fopen("entrada.txt", "r");
-    char line[256];
     if (fileContent!= NULL){
 
-        while (fgets(line, sizeof(line), fileContent)){
-            printf("%s", line);
+        int count = countLines(fileContent);
+        rewind(fileContent);
+        char **array = malloc(count * sizeof(char *));
+        for (int i = 0; i < count; i++){
+            char * line;
+            size_t len = 0;
+            array[i] = malloc(sizeof(char));
+            getline(&line, &len, fileContent);
+            sprintf(array[i], "%s", line);
         }
-        fclose(fileContent);
+         for (int i = 0; i < count; i++) {
+        printf("%s", array[i]);
+        }
+       
+       for (int i = 0; i < count; i++) {
+        free(array[i]);
+        }
+       
+       fclose(fileContent);
+       free(array);
+   }
+   else {
+       fprintf(stderr, "unable to open file !\n");
+   }
+}
+
+    
+int countLines(FILE * fileContent){
+    int count = 0;
+    char c;
+
+    for (c = getc(fileContent); c != EOF; c = getc(fileContent)){
+        if (c == '\n'){
+            count = count + 1;
+        }
     }
-    else {
-        fprintf(stderr, "unable to open file !\n");
-    }   
+    return count;
 
 }
