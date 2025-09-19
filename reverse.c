@@ -15,9 +15,13 @@ int main(int argc, char *argv[]){
     } else if (argc==2){
         readFileAndInversePrint(argv[1]);
     } else if (argc==3){
+        if(argv[1] == argv[2]){
+            fprintf(stderr, "Input and output file must be different !\n");
+            exit(1);
+        }   
         readFileAndReturnOutputFile(argv[1], argv[2]);
     } else {
-        fprintf(stderr, "Too many arguments !\n");
+        fprintf(stderr, "usage: reverse <input> <output> !\n");
         exit(1);
 
        
@@ -25,22 +29,35 @@ int main(int argc, char *argv[]){
 
     
     return 0;
-    
-
 }
 
 void readFileAndInversePrint(char *path){
     FILE * fileContent = openFile(path);
     if (fileContent!= NULL){
+        
 
         int count = countLines(fileContent);
         rewind(fileContent);
         char **array = malloc(count * sizeof(char *));
-        for (int i = count - 1; i >=0; i--){
+        if(array == NULL){
+            fprintf(stderr, "Malloc failed\n");
+            exit(1);
+        }
+        for (int i = count-1; i >=0; i--){
             char * line;
             size_t len = 0;
-            array[i] = malloc(sizeof(char));
-            getline(&line, &len, fileContent);
+            size_t longi;
+            longi = getline(&line, &len, fileContent);
+            if(line[longi-1] != '\n'){
+                line[longi] = '\n';
+                line[longi+1] = '\0';
+                longi += 1;
+            }
+            array[i] = malloc(longi * sizeof(char));
+            if(array[i] == NULL){
+                fprintf(stderr, "Malloc failed\n");
+                exit(1);
+            }
             sprintf(array[i], "%s", line);
         }
          for (int i = 0; i < count; i++) {
@@ -55,27 +72,79 @@ void readFileAndInversePrint(char *path){
        free(array);
    }
    else {
-       fprintf(stderr, "unable to open file !\n");
+       fprintf(stderr, "error: cannot open file 'input.txt'\n");
        exit(1);
    }
 }
 
-void readAndPrintConsole(){
-    char * line;
-    int amount;
-    printf("Enter the amount of lines: ");
-    scanf("%d", &amount);
-    char **array = malloc(amount * sizeof(char *));
-    for (int i = amount ; i >=0; i--){
-        size_t len = 0;
-        array[i] = malloc(sizeof(char*));
-        getline(&line, &len, stdin);
-        sprintf(array[i], "%s", line);
+void readAndPrintConsole(void) {
+    FILE *fileTemp = tmpfile();              
+    if (fileTemp == NULL) {
+        fprintf(stderr, "The temporal file couldn't be created\n");
+        exit(1);
     }
-    printf("Inversed Lines: \n");
-     for (int i = 0; i < amount; i++) {
-    printf("%s", array[i]);}
-}
+
+    char *line = NULL;                         
+    size_t len = 0;                            
+    size_t longi;                             
+
+    printf("Write the lines,  if u wanna exit press Ctrl+D:\n");
+
+    while ((longi = getline(&line, &len, stdin)) != -1) {
+        fputs(line, fileTemp);                 
+        if (longi > 0 && line[longi - 1] != '\n') {
+            fputc('\n', fileTemp);          
+        }
+    }
+    free(line);
+    line = NULL;
+    len  = 0;
+
+    rewind(fileTemp);
+    int count = countLines(fileTemp);
+    char **array = (char **)malloc((size_t)count * sizeof(char *));
+    if(array == NULL){
+            fprintf(stderr, "Malloc failed\n");
+            exit(1);
+        }
+    
+
+    rewind(fileTemp);
+     if (fileTemp!= NULL){
+    for (int i = count-1; i >=0; i--){
+            char * line;
+            size_t len = 0;
+            size_t longi;
+            longi = getline(&line, &len, fileTemp);
+            if(line[longi-1] != '\n'){
+                line[longi] = '\n';
+                line[longi+1] = '\0';
+                longi += 1;
+            }
+            array[i] = malloc(longi * sizeof(char));
+            if(array[i] == NULL){
+                fprintf(stderr, "Malloc failed\n");
+                exit(1);
+            }
+            sprintf(array[i], "%s", line);
+        }
+        printf("\nInversed lines:\n");
+        for (int i = 0; i < count; i++) {
+        printf("%s", array[i]);
+        }
+       
+       for (int i = 0; i < count; i++) {
+        free(array[i]);
+        }
+       
+       fclose(fileTemp);
+       free(array);
+     }
+    else {
+        fprintf(stderr, "unable to open file !\n");
+        exit(1);
+   }
+} 
 
 void readFileAndReturnOutputFile(char *path, char *outputPath){
     FILE * fileContent = openFile(path);
@@ -84,11 +153,27 @@ void readFileAndReturnOutputFile(char *path, char *outputPath){
         int count = countLines(fileContent);
         rewind(fileContent);
         char **array = malloc(count * sizeof(char *));
+        
+        if(array == NULL){
+            fprintf(stderr, "Malloc failed\n");
+            exit(1);
+        }
         for (int i = count - 1; i >=0; i--){
             char * line;
             size_t len = 0;
+            size_t longi;
+             if(line[longi-1] != '\n'){
+                line[longi] = '\n';
+                line[longi+1] = '\0';
+                longi += 1;
+            }
             array[i] = malloc(sizeof(char));
+            if(array[i] == NULL){
+                fprintf(stderr, "Malloc failed\n");
+                exit(1);
+            }
             getline(&line, &len, fileContent);
+           
             sprintf(array[i], "%s", line);
         }
         FILE * outputFile = fopen(outputPath, "w");
@@ -103,7 +188,9 @@ void readFileAndReturnOutputFile(char *path, char *outputPath){
        fclose(fileContent);
        fclose(outputFile);
        free(array);
-    }
+    } else {
+       fprintf(stderr, "error: cannot open file 'input.txt'\n");
+       exit(1);}
 }
 
 FILE* openFile(char* path){
@@ -113,15 +200,15 @@ FILE* openFile(char* path){
     return fileContent;
 }
 
-    
 int countLines(FILE * fileContent){
     int count = 0;
     char c;
+    size_t read;
+    size_t len = 0;
+    char * line = NULL ;
 
-    for (c = getc(fileContent); c != EOF; c = getc(fileContent)){
-        if (c == '\n'){
-            count = count + 1;
-        }
+    while((read = getline(&line, &len, fileContent)) != -1){
+        count++; 
     }
     return count;
 

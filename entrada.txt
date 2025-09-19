@@ -1,7 +1,7 @@
-julian
-isaza
-sebas
+La entrada es la misma que la salida: Si el archivo de entrada y el archivo de salida son el mismo archivo, debe imprimir un mensaje de error "El archivo de entrada y salida deben diferir" y salir con el código de retorno 1.
 
-sepulveda
-simon 
-sanchez
+Longitud de la cadena: No puedes asumir nada sobre la longitud que debe tener una línea. Por lo tanto, es posible que tengas que leer en una línea de entrada muy larga...
+
+Longitud del archivo: No puedes asumir nada sobre la longitud del archivo, es decir, puede ser MUY largo.
+
+Archivos no válidos: Si el usuario especifica un archivo de entrada o un archivo de salida, y por alguna razón, cuando intenta abrir dicho archivo (por ejemplo, input.txt) y falla, debe imprimir exactamente lo siguiente mensaje de error: error: cannot open file 'input.txt' y luego salir con el código de retorno 1 (es decir, llamar a exit(1);).
