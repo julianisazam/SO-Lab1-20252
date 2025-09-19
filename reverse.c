@@ -161,13 +161,7 @@ void readFileAndReturnOutputFile(char *path, char *outputPath){
         for (int i = count - 1; i >=0; i--){
             char * line;
             size_t len = 0;
-            size_t longi;
-             if(line[longi-1] != '\n'){
-                line[longi] = '\n';
-                line[longi+1] = '\0';
-                longi += 1;
-            }
-            array[i] = malloc(sizeof(char));
+           array[i] = malloc(sizeof(char));
             if(array[i] == NULL){
                 fprintf(stderr, "Malloc failed\n");
                 exit(1);
