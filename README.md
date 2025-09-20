@@ -41,3 +41,15 @@ El main ahora interpreta los argumentos pasados por consola:
 
 2 argumentos → lee un archivo y guarda la salida invertida en un archivo nuevo (`readFileAndReturnOutputFile`).
 Esto hace que el programa soporte tres modos de uso diferentes, lo que no existía en versiones anteriores.
+
+## Quinto commit
+**feat:** manejo de excepciones y refactorización de funcionalidades  
+- Se añadieron controles de errores en las funciones principales para mejorar la robustez.  
+- Se refactorizó `readAndPrintConsole` para que funcione de manera dinámica para la cantidad de lineas que requiera el usuario.  
+- Utilizacion de un control de parada para la funcion `readAndPrintConsole` utilizando Control + D
+- Se mejoró la legibilidad y el flujo de ejecución en caso de errores.  
+
+---
+
+## Commits extras
+**feat:** correccion de error pequeños y refactorizacion final
