@@ -2,7 +2,7 @@
 # Informe Laboratorio #1
 
 
-* [Link del video](https://youtu.be/uF3XIhZgMqU)
+* [Link de la sustencación](https://youtu.be/uF3XIhZgMqU)
 
 ##                  Integrantes
 
