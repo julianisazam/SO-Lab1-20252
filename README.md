@@ -43,7 +43,7 @@ El main ahora interpreta los argumentos pasados por consola:
 Esto hace que el programa soporte tres modos de uso diferentes, lo que no existía en versiones anteriores.
 
 ## Quinto commit
-**feat:** manejo de excepciones y refactorización de funcionalidades  
+Manejo de excepciones y refactorización de funcionalidades  
 - Se añadieron controles de errores en las funciones principales para mejorar la robustez.  
 - Se refactorizó `readAndPrintConsole` para que funcione de manera dinámica para la cantidad de lineas que requiera el usuario.  
 - Utilizacion de un control de parada para la funcion `readAndPrintConsole` utilizando Control + D
@@ -52,4 +52,4 @@ Esto hace que el programa soporte tres modos de uso diferentes, lo que no exist�
 ---
 
 ## Commits extras
-**feat:** correccion de error pequeños y refactorizacion final
+Correccion de error pequeños y refactorizacion final
